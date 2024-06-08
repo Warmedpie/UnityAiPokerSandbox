@@ -8,17 +8,17 @@ public static class Rank {
     //This is the main useage function
     //Given 7 cards, returns the best score (from 5 card rankings)
     public static float Rank7Hands(List<Card> cards) {
-        float max_score = 0;
+        float maxScore = 0;
         List<List<Card>> premutations = GeneratePremutations(cards);
 
         for (int i = 0; i < premutations.Count; i++) {
             float score = RankHand(premutations[i]);
-            if (score > max_score) {
-                max_score = score;
+            if (score > maxScore) {
+                maxScore = score;
             }
         }
 
-        return max_score;
+        return maxScore;
     }
     //This is the main driver function
     public static float RankHand(List<Card> cards) {
@@ -58,11 +58,11 @@ public static class Rank {
     // -------- Helper Functions -------- //
 
     //Sort the cards, used for kicker value computation, as well as straight calculations
-    public static List<int> SortCards(List<Card> cards, bool ace_high = true) {
+    public static List<int> SortCards(List<Card> cards, bool aceHigh = true) {
         List<int> ranks = new List<int>();
 
         for (int i = 0; i < cards.Count; i++) {
-            if (cards[i].rank == 1 && ace_high) ranks.Add(14);
+            if (cards[i].rank == 1 && aceHigh) ranks.Add(14);
             else ranks.Add(cards[i].rank);
         }
 
@@ -119,26 +119,26 @@ public static class Rank {
     public static int CountPairs(List<Card> cards) {
         Dictionary<int, int> pairs = FindPairInfo(cards);
 
-        int num_pairs = 0;
+        int numPairs = 0;
         foreach (KeyValuePair<int, int> entry in pairs) {
-            if (entry.Value == 2) num_pairs++;
+            if (entry.Value == 2) numPairs++;
         }
 
-        return num_pairs;
+        return numPairs;
     }
     public static int CountTrips(List<Card> cards) {
         Dictionary<int, int> pairs = FindPairInfo(cards);
 
-        int num_pairs = 0;
+        int numPairs = 0;
         foreach (KeyValuePair<int, int> entry in pairs) {
-            if (entry.Value == 3) num_pairs++;
+            if (entry.Value == 3) numPairs++;
         }
 
-        return num_pairs;
+        return numPairs;
     }
-    public static bool FindStraight(List<Card> cards, bool ace_high) {
+    public static bool FindStraight(List<Card> cards, bool aceHigh) {
 
-        List<int> ranks = SortCards(cards, ace_high);
+        List<int> ranks = SortCards(cards, aceHigh);
 
         return (ranks[0] - 1 == ranks[1]) && (ranks[0] - 2 == ranks[2]) && (ranks[0] - 3 == ranks[3]) && (ranks[0] - 4 == ranks[4]);
 
@@ -156,12 +156,12 @@ public static class Rank {
     public static int CountQuads(List<Card> cards) {
         Dictionary<int, int> pairs = FindPairInfo(cards);
 
-        int num_pairs = 0;
+        int numPairs = 0;
         foreach (KeyValuePair<int, int> entry in pairs) {
-            if (entry.Value == 4) num_pairs++;
+            if (entry.Value == 4) numPairs++;
         }
 
-        return num_pairs;
+        return numPairs;
     }
 
     // -------- Scoring Functions -------- //
@@ -215,10 +215,10 @@ public static class Rank {
         return score;
     }
 
-    public static int ScoreStraight(List<Card> cards, bool ace_high) {
+    public static int ScoreStraight(List<Card> cards, bool aceHigh) {
 
         //Get Straight info
-        List<int> ranks = SortCards(cards, ace_high);
+        List<int> ranks = SortCards(cards, aceHigh);
         int score = 120 + ranks[0];
 
         return score;
@@ -245,8 +245,8 @@ public static class Rank {
 
         return score;
     }
-    public static int ScoreStraightFlush(List<Card> cards, bool ace_high) {
-        return 700 + ScoreStraight(cards, ace_high);
+    public static int ScoreStraightFlush(List<Card> cards, bool aceHigh) {
+        return 700 + ScoreStraight(cards, aceHigh);
     }
 
 }

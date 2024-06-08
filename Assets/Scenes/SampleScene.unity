@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Flop_card0
+      value: flopCard0
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -287,7 +287,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Hero_card1
+      value: heroCard1
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -1871,7 +1871,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Flop_card1
+      value: flopCard1
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -3671,7 +3671,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Turn_card
+      value: turnCard
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -3924,7 +3924,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Villan_card1
+      value: villan0Card1
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -4720,7 +4720,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: River_card
+      value: riverCard
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -6030,7 +6030,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Villan_card0
+      value: villan0Card0
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -6812,7 +6812,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Hero_card0
+      value: heroCard0
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -7191,7 +7191,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Villan_card1 (2)
+      value: villan2Card1
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -10199,7 +10199,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Villan_card0 (1)
+      value: villan1Card0
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -10293,7 +10293,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Burn_card
+      value: burnCard
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -10752,7 +10752,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Villan_card0 (2)
+      value: villan2Card0
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -11180,28 +11180,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 303ea005545eade45ba1c4066b7e4fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player_cards:
+  playerCardsPrefabs:
   - {fileID: 877265352}
   - {fileID: 768083779}
-  villan_cards:
+  villanCardsPrefabs:
   - {fileID: 1912650710}
   - {fileID: 202124433}
   - {fileID: 2073355242}
   - {fileID: 1829542038}
   - {fileID: 482602570}
   - {fileID: 2097674494}
-  river_cards:
+  riverCardsPrefabs:
   - {fileID: 1649656469}
   - {fileID: 2123904554}
   - {fileID: 754862883}
   - {fileID: 860344635}
   - {fileID: 896453962}
-  player_scripts:
+  playerScripts:
   - {fileID: 1771899534}
   - {fileID: 5100400955897199808, guid: af1be9e8fadc2ef4587df166f8f43f34, type: 3}
   - {fileID: 5100400955897199808, guid: af1be9e8fadc2ef4587df166f8f43f34, type: 3}
   - {fileID: 5100400955897199808, guid: af1be9e8fadc2ef4587df166f8f43f34, type: 3}
-  state_text: {fileID: 215390665}
+  stateText: {fileID: 215390665}
+  botSpeed: 0.25
 --- !u!4 &1703176054
 Transform:
   m_ObjectHideFlags: 0
@@ -11679,7 +11680,7 @@ MonoBehaviour:
   fold: {fileID: 848414311}
   check: {fileID: 1461664474}
   raise: {fileID: 1275263895}
-  raise_amount_slider: {fileID: 1977155814}
+  raiseSlider: {fileID: 1977155814}
 --- !u!4 &1771899536
 Transform:
   m_ObjectHideFlags: 0
@@ -11949,7 +11950,7 @@ GameObject:
   - component: {fileID: 1861836322}
   - component: {fileID: 1861836321}
   m_Layer: 5
-  m_Name: game_state
+  m_Name: gameState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12121,7 +12122,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Flop_card2
+      value: flopCard2
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder
@@ -12739,7 +12740,7 @@ GameObject:
   - component: {fileID: 1977155816}
   - component: {fileID: 1977155814}
   m_Layer: 5
-  m_Name: raise_slider
+  m_Name: raiseSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13161,7 +13162,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6493502409863560524, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_Name
-      value: Villan_card1 (1)
+      value: villan1Card1
       objectReference: {fileID: 0}
     - target: {fileID: 6493502409863560527, guid: 3d2b70b3e5608d0459bf88c63c0077bc, type: 3}
       propertyPath: m_RootOrder

@@ -11,10 +11,10 @@ public class CheckFold : PlayerAction {
     public override PlayerTypes type { get { return PlayerTypes.AI; } }
        
 
-    public override Action PlayBehavior(List<Card> river, int amount_toCall, int pot) {
+    public override Action PlayBehavior(List<Card> river, int amountToCall, int pot) {
 
         //If there is a bet, the bot will fold (flag 0)
-        if (amount_toCall != 0) return new Action(ActionTypes.FOLD, 0);
+        if (amountToCall != 0) return new Action(ActionTypes.FOLD, 0);
 
         //Otherwise the bot will check (flag for bet, with amount 0)
         return new Action(ActionTypes.BET, 0);

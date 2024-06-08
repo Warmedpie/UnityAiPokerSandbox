@@ -67,11 +67,11 @@ public enum ActionTypes : int {
 
 public class Action {
     public ActionTypes type;
-    public int bet_amount;
+    public int betAmount;
 
     public Action(ActionTypes t, int b) {
         type = t;
-        bet_amount = b;
+        betAmount = b;
     }
 }
 
@@ -83,9 +83,9 @@ public class Player {
     private List<Card> hand = new List<Card>();
 
     public int money = 2000;
-    public int amount_bet = 0;
+    public int amountBet = 0;
     public PlayerStatus PlayerStatus = PlayerStatus.PLAYING;
-    public bool played_turn = false;
+    public bool playedTurn = false;
 
     public Card GetCard(int index) {
         return hand[index];
@@ -108,26 +108,35 @@ public class Dealer : MonoBehaviour {
     //The following sets are for setting card textures on the board
 
     //Cards that Player 1 is holding
-    [SerializeField] GameObject[] player_cards;
+    [SerializeField] GameObject[] playerCardsPrefabs;
 
     //Cards that the opponent is holding
-    [SerializeField] GameObject[] villan_cards;
+    [SerializeField] GameObject[] villanCardsPrefabs;
 
     //The cards within the river
-    [SerializeField] GameObject[] river_cards;
+    [SerializeField] GameObject[] riverCardsPrefabs;
 
     //The control scripts for the game
-    [SerializeField] GameObject[] player_scripts;
+    [SerializeField] GameObject[] playerScripts;
 
     //This is text to display the games state
-    [SerializeField] TMPro.TextMeshProUGUI state_text;
+    [SerializeField] TMPro.TextMeshProUGUI stateText;
+
+    //Bot play speed
+    [SerializeField] float botSpeed = 0.25f;
+
+    //Post Game Speed
+    [SerializeField] float postGameSpeed = 5f;
+
+    //Blind about (This version doesnt have little/big blind, however feel free to add this)
+    [SerializeField] int blindAmount = 10;
 
     //On start
     public static Dealer instance;
     private void Start() {
         BetterRand.Init();
 
-        for (int i = 0; i < Player_count; i++) players.Add(new Player());
+        for (int i = 0; i < playerCount; i++) players.Add(new Player());
   
         NewGame();
         instance = this;
@@ -136,13 +145,13 @@ public class Dealer : MonoBehaviour {
     // ----- Game State ----- //
     private void SetState() {
         String str = "Pot:         $" + this.pot + "\n";
-        for (int i = 0; i < Player_count; i++) {
+        for (int i = 0; i < playerCount; i++) {
             str += "Player " + i + ": $" + players[i].money;
             if (players[i].PlayerStatus == PlayerStatus.FOLDED) str += " FOLDED\n";
             if (players[i].PlayerStatus == PlayerStatus.ALLIN) str += " ALL IN\n";
             else str += "\n";
         }
-        state_text.text = str;
+        stateText.text = str;
     }
     bool resetting = false;
 
@@ -175,7 +184,7 @@ public class Dealer : MonoBehaviour {
     }
 
     // ----- Player information ----- //
-    int Player_count = 4;
+    int playerCount = 4;
     private List<Player> players = new List<Player>();
 
     // ----- Dealing information ----- //
@@ -185,9 +194,9 @@ public class Dealer : MonoBehaviour {
     public void NewGame() {
         resetting = false;
         //Hero cards are at q = 0, these are already face up
-        for (int q = 1; q < Player_count; q++) {
-            villan_cards[((q - 1) * 2) + 0].GetComponent<Draw>().Init(new Card(4,0));
-            villan_cards[((q - 1) * 2) + 1].GetComponent<Draw>().Init(new Card(4,0));
+        for (int q = 1; q < playerCount; q++) {
+            villanCardsPrefabs[((q - 1) * 2) + 0].GetComponent<Draw>().Init(new Card(4,0));
+            villanCardsPrefabs[((q - 1) * 2) + 1].GetComponent<Draw>().Init(new Card(4,0));
         }
 
         //Resets and clears river
@@ -195,34 +204,42 @@ public class Dealer : MonoBehaviour {
 
         //Reset pot
         pot = 0;
+        amountToCall = blindAmount;
 
         for (int q = 0; q < 5; q++) {
-            river_cards[q].GetComponent<Draw>().Init(new Card(4, 0));
+            riverCardsPrefabs[q].GetComponent<Draw>().Init(new Card(4, 0));
         }
 
         //Generate a new deck
         GenerateDeck();
 
-        //make it Player 0s turn
-        turn = 0;
+        //number of playing Players (Players who have neither folded or all-ined)
+        remainingPlayers = players.Count;
 
         //Add two cards to each Players hand
-        for (int i = 0; i < Player_count; i++) {
+        for (int i = 0; i < playerCount; i++) {
             players[i].ResetCards();
+
+            if (players[i].money == 0) {
+                remainingPlayers -= 1;
+                players[i].PlayerStatus = PlayerStatus.FOLDED;
+            }
+
             players[i].AddCard(GrabCard());
             players[i].AddCard(GrabCard());
 
-            player_scripts[i].GetComponent<PlayerAction>().SetPlayerInfo(players[i]);
-            players[i].played_turn = false;
+            playerScripts[i].GetComponent<PlayerAction>().SetPlayerInfo(players[i]);
+            players[i].playedTurn = false;
             players[i].PlayerStatus = PlayerStatus.PLAYING;
+            players[i].amountBet = 0;
         }
 
-        player_cards[0].GetComponent<Draw>().Init(players[0].GetCard(0));
-        player_cards[1].GetComponent<Draw>().Init(players[0].GetCard(1));
+        //Set turn to the first playable player (if player 0 is out of chips)
+        turn = -1;
+        UpdateTurn();
 
-
-        //number of playing Players (Players who have neither folded or all-ined)
-        playing_Players = players.Count;
+        playerCardsPrefabs[0].GetComponent<Draw>().Init(players[0].GetCard(0));
+        playerCardsPrefabs[1].GetComponent<Draw>().Init(players[0].GetCard(1));
 
         //Finally after dealing, take a turn
         SetState();
@@ -234,13 +251,17 @@ public class Dealer : MonoBehaviour {
 
         if (resetting) return;
 
-        for (int i = 0; i < Player_count; i++) {
-            players[i].played_turn = false;
+        int gameState = river.Count;
+
+        for (int i = 0; i < playerCount; i++) {
+            players[i].playedTurn = false;
         }
 
         //Set turn to the first playable player
-        turn = -1;
-        UpdateTurn();
+        if (remainingPlayers > 1) {
+            turn = -1;
+            UpdateTurn();
+        }
 
         //First we need to do the flop
         if (river.Count == 0) {
@@ -248,27 +269,27 @@ public class Dealer : MonoBehaviour {
             river.Add(GrabCard());
             river.Add(GrabCard());
 
-            river_cards[0].GetComponent<Draw>().Init(river[0]);
-            river_cards[1].GetComponent<Draw>().Init(river[1]);
-            river_cards[2].GetComponent<Draw>().Init(river[2]);
+            riverCardsPrefabs[0].GetComponent<Draw>().Init(river[0]);
+            riverCardsPrefabs[1].GetComponent<Draw>().Init(river[1]);
+            riverCardsPrefabs[2].GetComponent<Draw>().Init(river[2]);
         }
         //If there aren't 5 cards, deal another
         else if (river.Count != 5) {
             river.Add(GrabCard());
-            river_cards[river.Count - 1].GetComponent<Draw>().Init(river[river.Count - 1]);
+            riverCardsPrefabs[river.Count - 1].GetComponent<Draw>().Init(river[river.Count - 1]);
         }
 
         //if all 5 cards are added, we calculate the winner
         else {
             //Hero cards are at q = 0, these are already face up
-            for (int q = 1; q < Player_count; q++) {
-                villan_cards[((q-1) * 2) + 0].GetComponent<Draw>().Init(players[q].GetCard(0));
-                villan_cards[((q - 1) * 2) + 1].GetComponent<Draw>().Init(players[q].GetCard(1));
+            for (int q = 1; q < playerCount; q++) {
+                villanCardsPrefabs[((q-1) * 2) + 0].GetComponent<Draw>().Init(players[q].GetCard(0));
+                villanCardsPrefabs[((q - 1) * 2) + 1].GetComponent<Draw>().Init(players[q].GetCard(1));
             }
 
             int winner = 0;
-            float winning_score = 0;
-            for (int q = 0; q < Player_count; q++) {
+            float winningScore = 0;
+            for (int q = 0; q < playerCount; q++) {
                 if (players[q].PlayerStatus != PlayerStatus.FOLDED) {
                     List<Card> cards = new List<Card>(river);
                     cards.Add(players[q].GetCard(0));
@@ -278,8 +299,8 @@ public class Dealer : MonoBehaviour {
 
                     Debug.Log("Player " + q + " Scores: " + score);
 
-                    if (score > winning_score) {
-                        winning_score = score;
+                    if (score > winningScore) {
+                        winningScore = score;
                         winner = q;
                     }
                 }
@@ -289,14 +310,14 @@ public class Dealer : MonoBehaviour {
             players[winner].money += pot;
 
             resetting = true;
-            StartCoroutine(ResetGame(5));
+            StartCoroutine(ResetGame(postGameSpeed));
 
             return;
         }
 
 
         //If every Player (besides 1) is either ALL IN or FOLDED, just keep dealing
-        if (playing_Players <= 1 && river.Count != 5) {;
+        if (remainingPlayers <= 1 && gameState != 5) {;
             Deal();
             return;
         }
@@ -311,51 +332,51 @@ public class Dealer : MonoBehaviour {
 
     //The Player in slot 0 is to play
     int turn = 0;
-    int amount_toCall = 0;
+    int amountToCall = 0;
     int pot = 0;
-    int playing_Players;
+    int remainingPlayers;
 
     void TakeTurn() {
         //Return if Player is either folded or ALL IN
         if (players[turn].PlayerStatus != PlayerStatus.PLAYING) return;
 
-        if (players[turn].amount_bet == amount_toCall && players[turn].played_turn) return;
+        if (players[turn].amountBet == amountToCall && players[turn].playedTurn) return;
 
         //AI action simply calls the AI behavior function
-        if (player_scripts[turn].GetComponent<PlayerAction>().type == PlayerTypes.AI) {
-            player_scripts[turn].GetComponent<PlayerAction>().SetPlayerInfo(players[turn]);
-            Action play = player_scripts[turn].GetComponent<PlayerAction>().PlayBehavior(river, amount_toCall, pot);
-            DoPlayerAction(play, 0.25f);
+        if (playerScripts[turn].GetComponent<PlayerAction>().type == PlayerTypes.AI) {
+            playerScripts[turn].GetComponent<PlayerAction>().SetPlayerInfo(players[turn]);
+            Action play = playerScripts[turn].GetComponent<PlayerAction>().PlayBehavior(river, amountToCall, pot);
+            DoPlayerAction(play, botSpeed);
 
         }
         //Players turn
         else {
-            player_scripts[turn].GetComponent<HumanPlayer>().SetValues(amount_toCall, pot);
+            playerScripts[turn].GetComponent<HumanPlayer>().SetValues(amountToCall, pot);
         }
     }
 
     void UpdateTurn() {
 
         //If every Player (besides 1) is either ALL IN or FOLDED, just keep dealing
-        if (playing_Players <= 1) {
+        if (remainingPlayers < 1) {
             Deal();
             return;
         }
 
         turn++;
         //All Players have played
-        if (turn == Player_count) turn = 0;
+        if (turn == playerCount) turn = 0;
 
-        int Players_checked = 0;
+        int playersChecked = 0;
         //Loop through Players to see if they can play
         int i = turn;
         while (true) {
 
             //Reset the loop if we are at the last Player
-            if (i == Player_count) i = 0;
+            if (i == playerCount) i = 0;
 
             //if they can play, make it their turn
-            if (players[i].PlayerStatus == PlayerStatus.PLAYING && !(players[i].amount_bet == amount_toCall && players[i].played_turn)) {
+            if (players[i].PlayerStatus == PlayerStatus.PLAYING && !(players[i].amountBet == amountToCall && players[i].playedTurn)) {
 
                 Debug.Log(i);
 
@@ -364,10 +385,10 @@ public class Dealer : MonoBehaviour {
                 return;
             }
 
-            Players_checked++;
+            playersChecked++;
             i++;
             //if we checked every single Player in the board and still didnt find any playable Players, break the loop
-            if (Players_checked > Player_count + 1) break;
+            if (playersChecked > playerCount + 1) break;
 
         }
 
@@ -380,7 +401,7 @@ public class Dealer : MonoBehaviour {
 
         if (play.type == ActionTypes.FOLD) {
             players[turn].PlayerStatus = PlayerStatus.FOLDED;
-            playing_Players -= 1;
+            remainingPlayers -= 1;
 
             Debug.Log("player " + turn + " folds");
 
@@ -391,25 +412,25 @@ public class Dealer : MonoBehaviour {
         }
 
         //Take away the money from the Player, and update the total amount he has bet
-        players[turn].played_turn = true;
-        players[turn].money -= play.bet_amount;
-        players[turn].amount_bet += play.bet_amount;
+        players[turn].playedTurn = true;
+        players[turn].money -= play.betAmount;
+        players[turn].amountBet += play.betAmount;
 
         //check for all in
         if (players[turn].money == 0) {
             players[turn].PlayerStatus = PlayerStatus.ALLIN;
 
             Debug.Log("player " + turn + " ALL INS");
-            playing_Players -= 1;
+            remainingPlayers -= 1;
         }
         else {
-            Debug.Log("player " + turn + " bets $" + play.bet_amount);
+            Debug.Log("player " + turn + " bets $" + play.betAmount);
         }
         //Update the pot, and the amount needed to bet
-        pot += play.bet_amount;
+        pot += play.betAmount;
 
-        if (amount_toCall < players[turn].amount_bet) {
-            amount_toCall = players[turn].amount_bet;
+        if (amountToCall < players[turn].amountBet) {
+            amountToCall = players[turn].amountBet;
         }
 
         SetState();
@@ -417,7 +438,7 @@ public class Dealer : MonoBehaviour {
 
     }
 
-    IEnumerator ResetGame(int secs) {
+    IEnumerator ResetGame(float secs) {
         yield return new WaitForSeconds(secs);
         NewGame();
     }

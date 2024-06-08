@@ -9,41 +9,41 @@ public class HumanPlayer : PlayerAction {
     [SerializeField] Button fold;
     [SerializeField] Button check;
     [SerializeField] Button raise;
-    [SerializeField] Scrollbar raise_amount_slider;
+    [SerializeField] Scrollbar raiseSlider;
 
     //Let the Dealer know this is an AI
     public override PlayerTypes type { get { return PlayerTypes.HUMAN; } }
 
     //Variables for display
     int pot = 0;
-    int call_amount = 0;
-    int raise_amount = 0;
+    int callAmount = 0;
+    int raiseAmount = 0;
 
     //Init listeners
     private void Start() {
         fold.onClick.AddListener(FoldFunc);
         check.onClick.AddListener(CallFunc);
         raise.onClick.AddListener(RaiseFunc);
-        raise_amount_slider.onValueChanged.AddListener(delegate { RaiseVal(); });
+        raiseSlider.onValueChanged.AddListener(delegate { RaiseVal(); });
     }
 
     //This function is only used by the AI players, it is required to be here to satisfy the abstract requirment
-    public override Action PlayBehavior(List<Card> river, int amount_toCall, int pot) {
+    public override Action PlayBehavior(List<Card> river, int amountToCall, int pot) {
 
         return new Action(0,0);
     }
     
     //On a humans turn, the dealer sends information regarding the betting and pot
-    public void SetValues(int amount_toCall, int p) {
+    public void SetValues(int amountToCall, int p) {
         pot = p;
-        call_amount = amount_toCall - PlayerInfo.amount_bet;
+        callAmount = amountToCall - playerInfo.amountBet;
 
         SetInfo();
     }
 
     //Update display info
     private void SetInfo() {
-        string s = "Pot: " + pot + "\nAmount to call: " + call_amount + "\nRaise by: " + raise_amount + "(" + (call_amount + raise_amount) + ")";
+        string s = "Pot: " + pot + "\nAmount to call: " + callAmount + "\nRaise by: " + raiseAmount + "(" + (callAmount + raiseAmount) + ")";
 
         infobox.text = s;
     }
@@ -57,18 +57,18 @@ public class HumanPlayer : PlayerAction {
     //Call
     private void CallFunc() {
         Debug.Log("CALL");
-        Dealer.instance.DoPlayerAction(new Action(ActionTypes.BET, call_amount));
+        Dealer.instance.DoPlayerAction(new Action(ActionTypes.BET, callAmount));
     }
 
     //Raise
     private void RaiseFunc() {
         Debug.Log("RAISE");
-        Dealer.instance.DoPlayerAction(new Action(ActionTypes.BET, call_amount + raise_amount));
+        Dealer.instance.DoPlayerAction(new Action(ActionTypes.BET, Mathf.Min(playerInfo.money, callAmount + raiseAmount)));
     }
 
     //Update raise amount
     private void RaiseVal() {
-        raise_amount = (int)(PlayerInfo.money * raise_amount_slider.value);
+        raiseAmount = (int)(playerInfo.money * raiseSlider.value);
 
         SetInfo();
     }

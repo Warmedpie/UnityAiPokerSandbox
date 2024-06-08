@@ -7,15 +7,15 @@ public enum PlayerTypes : int {
 };
 public abstract class PlayerAction : MonoBehaviour {
     //This is a Player class holding info about cards, amount bet, and amount of money
-    public Player PlayerInfo;
+    public Player playerInfo;
     public abstract PlayerTypes type { get; }
 
     //Function to set the Player_info
     public void SetPlayerInfo(Player p) {
-        PlayerInfo = p;
+        playerInfo = p;
     }
 
     //This is behavior for setting bet amount or folding.
-    public abstract Action PlayBehavior(List<Card> river, int amount_toCall, int pot);
+    public abstract Action PlayBehavior(List<Card> river, int amountToCall, int pot);
 
 }
