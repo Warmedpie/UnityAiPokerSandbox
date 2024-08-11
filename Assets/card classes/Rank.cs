@@ -26,8 +26,6 @@ public static class Rank {
         float maxScore = 0;
         List<List<Card>> premutations = Generate6Premutations(cards);
 
-        Debug.Log(premutations.Count + " there are thios many 6 card perms");
-
         for (int i = 0; i < premutations.Count; i++) {
             float score = RankHand(premutations[i]);
             if (score > maxScore) {

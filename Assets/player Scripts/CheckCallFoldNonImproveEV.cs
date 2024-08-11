@@ -25,20 +25,14 @@ public class CheckCallFoldNonImproveEV : PlayerAction {
         if (river.Count == 0) {
             List<Card> ourHand = new List<Card>() { playerInfo.GetCard(0), playerInfo.GetCard(1) };
             ourScore = Rank.RankHand(ourHand);
-
-            Debug.Log("we have " + ourHand.Count);
         }
         if (river.Count == 3) {
             List<Card> ourHand = new List<Card>(river) { playerInfo.GetCard(0), playerInfo.GetCard(1) };
             ourScore = Rank.RankHand(ourHand);
-
-            Debug.Log("we have " + ourHand.Count);
         }
         if (river.Count == 4) {
             List<Card> ourHand = new List<Card>(river) { playerInfo.GetCard(0), playerInfo.GetCard(1) };
             ourScore = Rank.Rank6Hands(ourHand);
-
-            Debug.Log("we have " + ourHand.Count);
         }
         if (river.Count == 5) {
             List<Card> ourHand = new List<Card>(river) { playerInfo.GetCard(0), playerInfo.GetCard(1) };
@@ -87,6 +81,7 @@ public class CheckCallFoldNonImproveEV : PlayerAction {
         float EV = ((loss / holeCards.Count) * foldValue) + ((wins / holeCards.Count) * winValue) + ((chops / holeCards.Count) * chopValue);
 
         Debug.Log("EV: " + EV + "(W/D/L): " + "(" + wins + "/" + chops + "/" + loss + ")");
+
         //If we have positive EV, we call, if we have negative EV, we fold.
         if (EV >= 0) {
             //This number is the amount the AI will bet, since it is a check call bot, we will always bet either all our money, or match the "to call" amount
