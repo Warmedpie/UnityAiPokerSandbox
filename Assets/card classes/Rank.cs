@@ -9,7 +9,7 @@ public static class Rank {
     //Given 7 cards, returns the best score (from 5 card rankings)
     public static float Rank7Hands(List<Card> cards) {
         float maxScore = 0;
-        List<List<Card>> premutations = GeneratePremutations(cards);
+        List<List<Card>> premutations = Generate7Premutations(cards);
 
         for (int i = 0; i < premutations.Count; i++) {
             float score = RankHand(premutations[i]);
@@ -20,6 +20,24 @@ public static class Rank {
 
         return maxScore;
     }
+
+    //This is a helper function for Bots who want to calculate their score with only 6 cards in their hand
+    public static float Rank6Hands(List<Card> cards) {
+        float maxScore = 0;
+        List<List<Card>> premutations = Generate6Premutations(cards);
+
+        Debug.Log(premutations.Count + " there are thios many 6 card perms");
+
+        for (int i = 0; i < premutations.Count; i++) {
+            float score = RankHand(premutations[i]);
+            if (score > maxScore) {
+                maxScore = score;
+            }
+        }
+
+        return maxScore;
+    }
+
     //This is the main driver function
     public static float RankHand(List<Card> cards) {
         //Sort the ranks of our hands (Ace high)
@@ -72,8 +90,30 @@ public static class Rank {
         return ranks;
     }
 
+    //Given 6 cards, return all (unique) premutations of 5 cards
+    public static List<List<Card>> Generate6Premutations(List<Card> cards) {
+        List<List<Card>> premutations = new List<List<Card>>();
+
+        //First we create a list of indexs to ignore
+        List<List<int>> ignore = new List<List<int>>();
+        for (int i = 0; i < 6; i++) {
+           ignore.Add(new List<int> { i });
+        }
+
+        //Then, we loop through them creating new lists with the indexs removed
+        foreach (List<int> i in ignore) {
+            List<Card> clonedList = new List<Card>(cards);
+            clonedList.RemoveAt(i[0]);
+
+            if (clonedList.Count == 5) premutations.Add(clonedList);
+        }
+
+        return premutations;
+
+    }
+
     //Given 7 cards, return all (unique) premutations of 5 cards
-    public static List<List<Card>> GeneratePremutations(List<Card> cards) {
+    public static List<List<Card>> Generate7Premutations(List<Card> cards) {
         List<List<Card>> premutations = new List<List<Card>>();
 
         //First we create a list of indexs to ignore
@@ -140,12 +180,16 @@ public static class Rank {
 
         List<int> ranks = SortCards(cards, aceHigh);
 
+        if (cards.Count < 5) return false;
+
         return (ranks[0] - 1 == ranks[1]) && (ranks[0] - 2 == ranks[2]) && (ranks[0] - 3 == ranks[3]) && (ranks[0] - 4 == ranks[4]);
 
     }
     public static bool FindFlush(List<Card> cards) {
 
         int suit = cards[0].suit;
+
+        if (cards.Count < 5) return false;
 
         for (int i = 0; i < cards.Count; i++) {
             if (cards[i].suit != suit) return false;
