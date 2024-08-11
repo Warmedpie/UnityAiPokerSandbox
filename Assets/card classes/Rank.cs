@@ -44,7 +44,7 @@ public static class Rank {
         //Reduce tie breaks by high cards
         float score = 0;
         for (int i = 0; i < ranks.Count; i++) {
-            score += ranks[i] / Mathf.Pow(15,i+1);
+            score += ranks[i] / Mathf.Pow(15,i);
         }
 
         //Score Straight Flush
@@ -222,7 +222,7 @@ public static class Rank {
             }
         }
 
-        return 25 + rank;
+        return 250 + rank;
     }
     public static int ScoreTwoPair(List<Card> cards) {
 
@@ -240,13 +240,13 @@ public static class Rank {
 
         ranks.Sort();
 
-        return 40 + ranks[0] + ranks[1] * 2;
+        return 400 + ranks[0] + ranks[1] * 2;
     }
     public static int ScoreTripples(List<Card> cards) {
 
         //Get pair info
         Dictionary<int, int> pairs = FindPairInfo(cards);
-        int score = 85;
+        int score = 850;
 
         //Get pairs
         foreach (KeyValuePair<int, int> entry in pairs) {
@@ -261,23 +261,23 @@ public static class Rank {
 
         //Get Straight info
         List<int> ranks = SortCards(cards, aceHigh);
-        int score = 120 + ranks[0];
+        int score = 1200 + ranks[0];
 
         return score;
     }
     public static int ScoreFlush(List<Card> cards) {
-        return 135;
+        return 1350;
     }
 
     public static int ScoreFullHouse(List<Card> cards) {
-        return 150 + ScoreTripples(cards) + ScorePair(cards);
+        return 1500 + ScoreTripples(cards) + ScorePair(cards);
     }
 
     public static int ScoreQuads(List<Card> cards) {
 
         //Get pair info
         Dictionary<int, int> pairs = FindPairInfo(cards);
-        int score = 500;
+        int score = 5000;
 
         //Get pairs
         foreach (KeyValuePair<int, int> entry in pairs) {
@@ -288,7 +288,7 @@ public static class Rank {
         return score;
     }
     public static int ScoreStraightFlush(List<Card> cards, bool aceHigh) {
-        return 700 + ScoreStraight(cards, aceHigh);
+        return 7000 + ScoreStraight(cards, aceHigh);
     }
 
 }

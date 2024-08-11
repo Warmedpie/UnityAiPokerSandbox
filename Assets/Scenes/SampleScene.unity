@@ -11198,9 +11198,9 @@ MonoBehaviour:
   - {fileID: 896453962}
   playerScripts:
   - {fileID: 1771899534}
-  - {fileID: 5100400955897199808, guid: af1be9e8fadc2ef4587df166f8f43f34, type: 3}
   - {fileID: 5100400955897199808, guid: f31acb6a77dcaa048ae5d8a8a8c4473a, type: 3}
-  - {fileID: 5100400955897199808, guid: af1be9e8fadc2ef4587df166f8f43f34, type: 3}
+  - {fileID: 5100400955897199808, guid: f31acb6a77dcaa048ae5d8a8a8c4473a, type: 3}
+  - {fileID: 5100400955897199808, guid: f31acb6a77dcaa048ae5d8a8a8c4473a, type: 3}
   stateText: {fileID: 215390665}
   botSpeed: 0.25
   postGameSpeed: 5

@@ -22,9 +22,9 @@ public class GenerateAllHoleCards : MonoBehaviour {
             }
         }
 
-        //Non suited non pairs
+        //non pairs
         for (int suit1 = 0; suit1 <= 3; suit1++) {
-            for (int suit2 = suit1 + 1; suit2 <= 3; suit2++) {
+            for (int suit2 = 0; suit2 <= 3; suit2++) {
                 for (int i = 1; i <= 13; i++) {
                     for (int j = i + 1; j <= 13; j++) {
                         List<Card> hand = new List<Card>();
@@ -38,23 +38,6 @@ public class GenerateAllHoleCards : MonoBehaviour {
                 }
             }
         }
-
-        //Suited non pairs
-        for (int suit = 0; suit <= 3; suit++) {
-            for (int i = 1; i <= 13; i++) {
-                for (int j = i + 1; j <= 13; j++) {
-                    List<Card> hand = new List<Card>();
-                    Card c0 = new Card(suit, i);
-                    Card c1 = new Card(suit, j);
-                    hand.Add(c0);
-                    hand.Add(c1);
-
-                    holeCards.Add(hand);
-                }
-            }
-        }
-
-        Debug.Log("Combos: " + holeCards.Count);
     }
 
     public List<List<Card>> GetHoleCards() {

@@ -225,23 +225,25 @@ public class Dealer : MonoBehaviour {
                 remainingPlayers -= 1;
                 players[i].PlayerStatus = PlayerStatus.FOLDED;
             }
+            else {
+                players[i].AddCard(GrabCard());
+                players[i].AddCard(GrabCard());
 
-            players[i].AddCard(GrabCard());
-            players[i].AddCard(GrabCard());
-
-            playerScripts[i].GetComponent<PlayerAction>().SetPlayerInfo(players[i]);
-            players[i].playedTurn = false;
-            players[i].PlayerStatus = PlayerStatus.PLAYING;
-            players[i].amountBet = 0;
+                playerScripts[i].GetComponent<PlayerAction>().SetPlayerInfo(players[i]);
+                players[i].playedTurn = false;
+                players[i].PlayerStatus = PlayerStatus.PLAYING;
+                players[i].amountBet = 0;
+            }
         }
 
         //Set turn to the first playable player (if player 0 is out of chips)
         turn = -1;
         UpdateTurn();
 
-        playerCardsPrefabs[0].GetComponent<Draw>().Init(players[0].GetCard(0));
-        playerCardsPrefabs[1].GetComponent<Draw>().Init(players[0].GetCard(1));
-
+        if (playerCount > 0) {
+            playerCardsPrefabs[0].GetComponent<Draw>().Init(players[0].GetCard(0));
+            playerCardsPrefabs[1].GetComponent<Draw>().Init(players[0].GetCard(1));
+        }
         //Finally after dealing, take a turn
         SetState();
         TakeTurn();
@@ -307,7 +309,7 @@ public class Dealer : MonoBehaviour {
                 }
             }
 
-            Debug.Log("Player " + winner + "wins $" + pot);
+            Debug.Log("Player " + winner + " wins $" + pot);
             players[winner].money += pot;
 
             resetting = true;
@@ -378,9 +380,6 @@ public class Dealer : MonoBehaviour {
 
             //if they can play, make it their turn
             if (players[i].PlayerStatus == PlayerStatus.PLAYING && !(players[i].amountBet == amountToCall && players[i].playedTurn)) {
-
-                Debug.Log(i);
-
                 turn = i;
                 TakeTurn();
                 return;
